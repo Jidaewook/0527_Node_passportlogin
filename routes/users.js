@@ -14,17 +14,17 @@ router.get('/login', (req, res) => {
     res.render('login');
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
     //일단 로그인을 등록하면 로컬(세션)에 저장된다.
     passport.authenticate('local', {
-        successRedirect: '/users/dashboard',
+        successRedirect: '/dashboard',
         failureRedirect: '/users/login',
         failureFlash: true
-    })(req, res);
+    })(req, res, next);
 });
 
 //로그아웃
-router.get('/logout', (req, res)=> {
+router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success_msg', 'You are logged out');
     req.redirect('/users/login');
@@ -109,12 +109,6 @@ router.post('/register', (req, res) => {
 
 
 });
-
-
-router.get('/dashboard', (req, res) =>{
-    res.render('dashboard');
-});
-
 
 
 module.exports = router;
