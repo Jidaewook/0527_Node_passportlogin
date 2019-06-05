@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
+
 
 const userModel = require('../models/User');
 
@@ -10,6 +12,22 @@ const userModel = require('../models/User');
 //로그인 페이지
 router.get('/login', (req, res) => {
     res.render('login');
+});
+
+router.post('/login', (req, res) => {
+    //일단 로그인을 등록하면 로컬(세션)에 저장된다.
+    passport.authenticate('local', {
+        successRedirect: '/users/dashboard',
+        failureRedirect: '/users/login',
+        failureFlash: true
+    })(req, res);
+});
+
+//로그아웃
+router.get('/logout', (req, res)=> {
+    req.logout();
+    req.flash('success_msg', 'You are logged out');
+    req.redirect('/users/login');
 });
 
 //회원가입 페이지
@@ -100,3 +118,4 @@ router.get('/dashboard', (req, res) =>{
 
 
 module.exports = router;
+
