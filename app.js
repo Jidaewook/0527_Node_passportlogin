@@ -1,10 +1,24 @@
 const express = require('express');
 const expressLayout = require('express-ejs-layouts');
+const mongoose = require('mongoose');
+
+
 const app = express();
+
+// DB Config
+const db = require('./config/keys').mongoURI;
+
+mongoose.connect(db, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB Connected …'))
+    .catch(err => console.log(err));
+
 
 //EJS 사용가능케 하기, EJS 홈페이지에서 사용법 확인
 app.use(expressLayout);
 app.set('view engine', 'ejs');
+
+
+
 
 
 app.use('/', require('./routes/index'));
